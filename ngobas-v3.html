@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NGOBUS '90 — Namilyango Brotherhood</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  /* === PALETTE: Derived from Namilyango Crest === */
+  --midnight:#0B1A2E;--midnight-deep:#060F1A;--navy:#142A45;--navy-soft:#1C3556;
+  --forest:#1A3D2E;--forest-deep:#0D2A1E;--forest-glow:#2A5A42;
+  --terracotta:#8B4332;--terracotta-deep:#6B2D23;--terracotta-glow:#A85A48;
+  --gold:#C49A3C;--gold-light:#D9B55D;--gold-pale:#E8D5A0;--gold-dim:rgba(196,154,60,.15);
+  --ivory:#F4EFE2;--ivory-dim:#E8E0D0;--cream:#DCD2BE;
+  --ink:#0E0E12;--ink-soft:#3A3832;
+  /* === TYPE === */
+  --display:'Playfair Display',Georgia,serif;
+  --body:'Crimson Pro',Georgia,serif;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--gold) var(--midnight-deep)}
+body{background:var(--midnight-deep);color:var(--ivory);font-family:var(--body);font-size:18px;line-height:1.65;overflow-x:hidden;cursor:none}
+::selection{background:var(--gold);color:var(--midnight-deep)}
+
+/* ===== CURSOR ===== */
+.cur{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:99999;mix-blend-mode:difference;transition:width .25s,height .25s,background .25s}
+.cur.h{width:44px;height:44px;background:transparent;border:1px solid var(--gold);mix-blend-mode:normal}
+.cur-t{position:fixed;width:4px;height:4px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:99998;opacity:.35}
+
+/* ===== SCROLL BAR ===== */
+.spb{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--forest),var(--gold),var(--terracotta));z-index:100001;width:0}
+
+/* ===== GRAIN ===== */
+.grain{position:fixed;inset:0;z-index:99990;pointer-events:none;opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:128px}
+.grain::after{content:'';position:absolute;inset:0;background:inherit;animation:gs .4s steps(3) infinite}
+@keyframes gs{0%{transform:translate(0)}33%{transform:translate(-2px,2px)}66%{transform:translate(2px,-1px)}100%{transform:translate(-1px,-2px)}}
+
+/* ===== LOADER ===== */
+.ld{position:fixed;inset:0;z-index:100002;background:var(--midnight-deep);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1s ease .3s,visibility 1s}
+.ld.done{opacity:0;visibility:hidden;pointer-events:none}
+.ld svg{width:100px;height:110px;animation:cp 2.5s ease-in-out infinite}
+@keyframes cp{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.04);opacity:1}}
+.ld-t{margin-top:28px;font-family:var(--mono);font-size:10px;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);opacity:.5}
+.ld-b{width:180px;height:1px;background:var(--navy);margin-top:18px;overflow:hidden;position:relative}
+.ld-b::after{content:'';position:absolute;left:0;top:0;height:100%;width:0;background:linear-gradient(90deg,var(--forest),var(--gold));animation:lb 2.8s ease-in-out forwards}
+@keyframes lb{to{width:100%}}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:100000;padding:22px 50px;display:flex;justify-content:space-between;align-items:center;background:transparent;transition:all .4s}
+nav.sc{background:rgba(6,15,26,.94);backdrop-filter:blur(20px);padding:14px 50px;border-bottom:1px solid rgba(196,154,60,.08)}
+.nb{font-family:var(--display);font-weight:700;font-size:20px;color:var(--ivory);letter-spacing:.05em}
+.nb em{font-style:italic;font-weight:400;color:var(--gold)}
+.nl{display:flex;gap:36px;list-style:none}
+.nl a{font-family:var(--mono);text-decoration:none;color:rgba(244,239,226,.4);font-size:10px;letter-spacing:.22em;text-transform:uppercase;transition:color .3s;position:relative}
+.nl a::after{content:'';position:absolute;bottom:-6px;left:0;width:0;height:1px;background:var(--gold);transition:width .4s cubic-bezier(.16,1,.3,1)}
+.nl a:hover{color:var(--gold)}
+.nl a:hover::after{width:100%}
+
+/* ===== DOTS ===== */
+.dots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:100000;display:flex;flex-direction:column;gap:14px}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(244,239,226,.1);border:1px solid rgba(244,239,226,.15);cursor:pointer;transition:all .4s}
+.dot.a{background:var(--gold);border-color:var(--gold);box-shadow:0 0 10px rgba(196,154,60,.35)}
+
+/* ===== REVEALS ===== */
+.rv{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.rv.v{opacity:1;transform:translateY(0)}
+.rvl{opacity:0;transform:translateX(-60px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.rvl.v{opacity:1;transform:translateX(0)}
+.rvr{opacity:0;transform:translateX(60px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.rvr.v{opacity:1;transform:translateX(0)}
+@keyframes fi{to{opacity:1}}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 80% 70% at 50% 45%,var(--navy) 0%,var(--midnight) 50%,var(--midnight-deep) 100%)}
+.hero-canvas{position:absolute;inset:0;z-index:1}
+.hero-vig{position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 60% 55% at 50% 48%,transparent 20%,rgba(6,15,26,.6) 70%,var(--midnight-deep) 100%)}
+.hero-c{position:relative;z-index:3;text-align:center;padding:0 20px}
+.hero-crest{width:130px;margin:0 auto 40px;opacity:0;animation:fi 1.2s 2.6s forwards}
+.hero-ey{font-family:var(--mono);font-size:10px;letter-spacing:.6em;text-transform:uppercase;color:var(--gold);margin-bottom:44px;opacity:0;animation:fi 1s 2.9s forwards}
+.hero-t{font-family:var(--display);font-weight:900;font-size:clamp(72px,14vw,200px);line-height:.82;color:var(--ivory);letter-spacing:-.04em}
+.hero-t .lt{display:inline-block;opacity:0;transform:translateY(100%);animation:lu .7s cubic-bezier(.16,1,.3,1) forwards}
+.hero-t em{font-weight:400;font-style:italic;color:var(--gold);display:block;font-size:.38em;letter-spacing:.06em;margin-top:14px}
+.hero-t em .lt{color:var(--gold)}
+@keyframes lu{to{opacity:1;transform:translateY(0)}}
+.hero-yr{font-family:var(--display);font-weight:300;font-size:22px;letter-spacing:.45em;color:var(--cream);margin-top:48px;opacity:0;animation:fi 1s 3.4s forwards;position:relative;display:inline-block}
+.hero-yr::before,.hero-yr::after{content:'';position:absolute;top:50%;width:50px;height:.5px}
+.hero-yr::before{right:calc(100% + 20px);background:linear-gradient(90deg,transparent,var(--gold))}
+.hero-yr::after{left:calc(100% + 20px);background:linear-gradient(270deg,transparent,var(--gold))}
+.hero-tl{font-family:var(--body);font-weight:300;font-style:italic;font-size:21px;color:rgba(244,239,226,.4);max-width:500px;margin:36px auto 0;line-height:1.6;opacity:0;animation:fi 1.2s 3.7s forwards}
+.hero-sc{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fi 1s 4.2s forwards}
+.hero-sc span{font-family:var(--mono);font-size:8px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);opacity:.45}
+.sln{width:1px;height:36px;background:linear-gradient(180deg,var(--gold),transparent);animation:sp 2s ease-in-out infinite}
+@keyframes sp{0%,100%{opacity:.2;transform:scaleY(1)}50%{opacity:.8;transform:scaleY(1.2)}}
+
+/* ===== TRANSITION GRADIENTS BETWEEN SECTIONS ===== */
+.grad-to-ivory{height:120px;background:linear-gradient(180deg,var(--midnight-deep),var(--ivory));position:relative;z-index:2}
+.grad-to-dark{height:120px;background:linear-gradient(180deg,var(--ivory),var(--midnight-deep));position:relative;z-index:2}
+.grad-to-forest{height:120px;background:linear-gradient(180deg,var(--ivory),var(--forest-deep));position:relative;z-index:2}
+.grad-to-ivory-from-forest{height:120px;background:linear-gradient(180deg,var(--forest-deep),var(--ivory));position:relative;z-index:2}
+.grad-to-midnight{height:120px;background:linear-gradient(180deg,var(--ivory),var(--midnight));position:relative;z-index:2}
+.grad-to-ivory-from-midnight{height:120px;background:linear-gradient(180deg,var(--midnight),var(--ivory));position:relative;z-index:2}
+
+/* ===== SECTION GENERIC ===== */
+.s{padding:140px 60px;position:relative;z-index:2}
+.sc{max-width:1260px;margin:0 auto}
+.sh{margin-bottom:90px}
+.sn{font-family:var(--display);font-style:italic;font-weight:400;font-size:90px;line-height:1;opacity:.25}
+.se{font-family:var(--mono);font-size:9px;letter-spacing:.4em;text-transform:uppercase;margin-bottom:14px}
+.st{font-family:var(--display);font-size:clamp(44px,6.5vw,88px);font-weight:700;line-height:.95;letter-spacing:-.03em}
+.st em{font-weight:400;font-style:italic}
+
+/* Light */
+.lt-s{background:var(--ivory);color:var(--ink)}
+.lt-s .sn{color:var(--forest);opacity:.12}
+.lt-s .se{color:var(--forest)}
+.lt-s .st{color:var(--midnight)}
+.lt-s .st em{color:var(--gold)}
+
+/* Forest */
+.fr-s{background:var(--forest-deep);color:var(--ivory)}
+.fr-s .sn{color:var(--gold);opacity:.15}
+.fr-s .se{color:var(--gold)}
+.fr-s .st{color:var(--ivory)}
+.fr-s .st em{color:var(--gold-light)}
+
+/* Dark */
+.dk-s{background:var(--midnight);color:var(--ivory)}
+.dk-s .sn{color:var(--gold);opacity:.15}
+.dk-s .se{color:var(--gold)}
+.dk-s .st{color:var(--ivory)}
+.dk-s .st em{color:var(--gold)}
+
+/* ===== BROTHERHOOD ===== */
+.br-split{display:grid;grid-template-columns:1.15fr 1fr;gap:90px;align-items:center}
+.br-text .lead{font-family:var(--display);font-style:italic;font-weight:400;font-size:30px;line-height:1.45;color:var(--midnight);margin-bottom:36px}
+.br-text p{font-size:19px;line-height:1.85;color:var(--ink-soft);margin-bottom:22px}
+.br-text .dc::first-letter{font-family:var(--display);font-weight:800;font-size:82px;float:left;line-height:.7;margin:12px 14px 0 0;color:var(--forest)}
+.br-stats{display:grid;grid-template-columns:1fr 1fr;gap:3px;border-radius:6px;overflow:hidden}
+.stb{background:var(--midnight);padding:48px 32px;text-align:center;position:relative;overflow:hidden}
+.stb::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(26,61,46,.15),transparent 60%);pointer-events:none}
+.stb-n{font-family:var(--display);font-weight:800;font-size:56px;color:var(--gold);line-height:1}
+.stb-l{font-family:var(--mono);font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:rgba(244,239,226,.3);margin-top:10px}
+
+/* ===== LEADERSHIP ===== */
+.ld-row{display:grid;grid-template-columns:repeat(3,1fr);gap:50px;margin-top:50px}
+.ldr{text-align:center;padding:48px 28px 40px;position:relative;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.ldr:hover{transform:translateY(-10px)}
+.ldr::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:50px;background:linear-gradient(180deg,var(--gold),transparent);opacity:.3}
+.ldr-av{width:170px;height:170px;margin:0 auto 32px;border-radius:50%;position:relative;
+  background:linear-gradient(135deg,var(--navy),var(--midnight-deep));
+  box-shadow:0 0 0 1px var(--gold),0 0 0 3px var(--midnight-deep),0 0 0 4px rgba(196,154,60,.2),0 24px 50px -16px rgba(0,0,0,.5)}
+.ldr-av::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.06),transparent 50%)}
+.ldr-ini{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:52px;font-weight:600;color:var(--gold-light);font-style:italic}
+.ldr-r{font-family:var(--mono);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.ldr-nm{font-family:var(--display);font-size:26px;font-weight:600;color:var(--ivory);margin-bottom:16px;line-height:1.15}
+.ldr-q{font-family:var(--body);font-style:italic;font-size:16px;color:rgba(244,239,226,.35);line-height:1.6;max-width:260px;margin:0 auto}
+
+/* ===== GALLERY ===== */
+.gal-s{padding:140px 0;overflow:hidden}
+.gal-s .sh{padding:0 60px;max-width:1260px;margin:0 auto 70px}
+.gtw{position:relative;cursor:grab}
+.gtw:active{cursor:grabbing}
+.gt{display:flex;gap:18px;padding:0 60px;will-change:transform}
+.gc{flex:0 0 auto;width:400px;height:540px;position:relative;overflow:hidden;border-radius:3px}
+.gc.w{width:600px}
+.gc-img{width:100%;height:100%;background-size:cover;background-position:center;transition:transform 1.4s cubic-bezier(.16,1,.3,1),filter .6s;filter:sepia(.45) brightness(.82) contrast(1.1)}
+.gc:hover .gc-img{transform:scale(1.05);filter:sepia(0) brightness(.9) contrast(1.05)}
+.gc-ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(6,15,26,.94));display:flex;flex-direction:column;justify-content:flex-end;padding:36px;opacity:0;transition:opacity .45s}
+.gc:hover .gc-ov{opacity:1}
+.gc-m{font-family:var(--mono);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.gc-t{font-family:var(--display);font-size:24px;font-weight:600;color:var(--ivory)}
+.gal-hint{display:flex;align-items:center;gap:14px;padding:36px 60px 0;font-family:var(--mono);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(244,239,226,.2)}
+.gal-hl{width:50px;height:1px;background:var(--gold);opacity:.3}
+
+/* ===== NICE ===== */
+.ni-lay{display:grid;grid-template-columns:1fr 1.3fr;gap:90px;align-items:start}
+.ni-gnt{font-family:var(--display);font-weight:900;font-size:clamp(130px,16vw,280px);line-height:.78;color:var(--forest);opacity:.1;letter-spacing:-.05em;user-select:none}
+.ni-sub{font-family:var(--mono);font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:var(--forest);margin-top:20px;opacity:.5}
+.ni-p{font-family:var(--body);font-size:20px;line-height:1.85;color:var(--ink-soft);margin-bottom:22px}
+.ni-g{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:44px}
+.ni-c{background:var(--ivory-dim);padding:28px;border-left:2px solid var(--gold);transition:all .35s cubic-bezier(.16,1,.3,1)}
+.ni-c:hover{background:var(--cream);transform:translateX(5px)}
+.ni-cl{font-family:var(--mono);font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.ni-ct{font-family:var(--body);font-size:15px;color:var(--ink-soft);line-height:1.5}
+.ni-ctas{display:flex;gap:14px;margin-top:44px;flex-wrap:wrap}
+.btn{display:inline-block;padding:16px 34px;font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;border:1px solid var(--forest);color:var(--forest);transition:all .4s cubic-bezier(.16,1,.3,1);cursor:pointer;background:transparent}
+.btn-f{background:var(--forest);color:var(--ivory)}
+.btn:hover{background:var(--gold);border-color:var(--gold);color:var(--midnight-deep);transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,154,60,.2)}
+
+/* ===== MEMORIAL ===== */
+.mem{text-align:center;border-top:1px solid rgba(196,154,60,.1);border-bottom:1px solid rgba(196,154,60,.1)}
+.mem .sh{text-align:center}
+.mem-dv{display:flex;align-items:center;justify-content:center;gap:16px;margin:0 auto 30px}
+.mem-dvl{width:40px;height:.5px;background:var(--gold);opacity:.25}
+.mem-dvs{font-size:7px;color:var(--gold);opacity:.5}
+.mem-q{font-family:var(--display);font-style:italic;font-weight:400;font-size:clamp(22px,2.8vw,34px);color:rgba(244,239,226,.5);max-width:720px;margin:50px auto 70px;line-height:1.5}
+.mem-row{display:flex;justify-content:center;gap:56px;flex-wrap:wrap}
+.mem-s{text-align:center;opacity:.6;transition:opacity .5s}
+.mem-s:hover{opacity:1}
+.mem-sc{width:110px;height:110px;border-radius:50%;margin:0 auto 18px;border:1px solid rgba(196,154,60,.4);background:linear-gradient(135deg,rgba(20,42,69,.6),rgba(6,15,26,.8));position:relative;overflow:hidden}
+.mem-sc::after{content:'✦';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;opacity:.3}
+.mem-sn{font-family:var(--display);font-size:17px;color:var(--ivory);margin-bottom:3px}
+.mem-sy{font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:rgba(244,239,226,.25)}
+.mem-candle{width:1px;height:70px;background:linear-gradient(180deg,var(--gold),transparent);margin:56px auto 0;position:relative}
+.mem-candle::before{content:'';position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:7px;height:12px;background:var(--gold);border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;filter:blur(1.5px);animation:fl 1.8s ease-in-out infinite alternate}
+@keyframes fl{0%{opacity:.6;transform:translateX(-50%) scaleY(1)}50%{opacity:1;transform:translateX(-50%) scaleY(1.12)}100%{opacity:.7;transform:translateX(-50%) scaleY(.93)}}
+
+/* ===== PROFILES ===== */
+.pr-intro{font-family:var(--body);font-size:21px;line-height:1.7;color:var(--ink-soft);max-width:780px;margin-bottom:60px}
+.pr-g{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.pr{background:var(--ivory-dim);padding:44px 32px;position:relative;overflow:hidden;transition:all .45s cubic-bezier(.16,1,.3,1)}
+.pr::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--forest),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.pr:hover::before{transform:scaleX(1)}
+.pr:hover{background:var(--ivory);box-shadow:0 24px 50px -16px rgba(26,61,46,.12);transform:translateY(-6px)}
+.pr-tg{font-family:var(--mono);font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.pr-nm{font-family:var(--display);font-size:24px;font-weight:600;color:var(--midnight);margin-bottom:14px;line-height:1.15}
+.pr-bio{font-family:var(--body);font-size:15px;color:var(--ink-soft);line-height:1.6;margin-bottom:20px}
+.pr-lnk{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--forest);text-decoration:none;position:relative;padding-bottom:3px}
+.pr-lnk::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;background:var(--gold);transform:scaleX(.25);transform-origin:left;transition:transform .3s}
+.pr-lnk:hover::after{transform:scaleX(1)}
+
+/* ===== PLANS ===== */
+.pl-g{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:50px}
+.pl{padding:56px 46px;border:1px solid rgba(196,154,60,.15);position:relative;transition:border-color .4s,box-shadow .5s}
+.pl:hover{border-color:rgba(196,154,60,.4);box-shadow:0 0 60px rgba(196,154,60,.06)}
+.pl::before{content:'';position:absolute;inset:7px;border:1px solid rgba(196,154,60,.06);pointer-events:none}
+.pl-bd{display:inline-block;padding:4px 12px;font-family:var(--mono);font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(196,154,60,.4);margin-bottom:22px}
+.pl-ty{font-family:var(--mono);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(244,239,226,.3);margin-bottom:10px}
+.pl-nm{font-family:var(--display);font-size:38px;font-weight:700;color:var(--ivory);margin-bottom:28px;line-height:1.05}
+.pl-nm em{font-weight:400;font-style:italic;color:var(--gold)}
+.pl-pr{display:flex;align-items:center;gap:18px;padding:28px 0;border-top:1px solid rgba(196,154,60,.12);border-bottom:1px solid rgba(196,154,60,.12);margin:28px 0;flex-wrap:wrap}
+.pl-am{font-family:var(--display);font-weight:800;font-size:44px;color:var(--gold)}
+.pl-an{font-family:var(--body);font-style:italic;font-size:14px;color:rgba(244,239,226,.35)}
+.pl-ar{color:var(--gold);font-size:24px;margin:0 8px}
+.pl-ft{list-style:none;margin:28px 0}
+.pl-ft li{padding:11px 0;font-family:var(--body);color:rgba(244,239,226,.6);font-size:16px;padding-left:26px;position:relative;border-bottom:1px solid rgba(244,239,226,.04)}
+.pl-ft li::before{content:'◆';position:absolute;left:0;color:var(--gold);font-size:7px;top:14px}
+.pl-ct{margin-top:28px}
+.btn-g{background:var(--gold);border-color:var(--gold);color:var(--midnight-deep)}
+.btn-g:hover{background:var(--gold-light);border-color:var(--gold-light)}
+.pl-dt{font-family:var(--body);font-style:italic;font-size:18px;color:rgba(244,239,226,.4);line-height:1.65;margin:28px 0}
+
+/* ===== CTA SECTION ===== */
+.cta-s{text-align:center;background:linear-gradient(180deg,var(--midnight),var(--forest-deep),var(--midnight-deep));padding:160px 60px}
+.cta-s .st{color:var(--ivory);font-size:clamp(40px,5.5vw,72px);max-width:800px;margin:0 auto}
+.cta-s .st em{color:var(--gold)}
+.cta-sub{font-family:var(--body);font-style:italic;font-size:22px;color:rgba(244,239,226,.4);max-width:600px;margin:30px auto 50px;line-height:1.6}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-l{background:transparent;border-color:var(--ivory);color:var(--ivory)}
+.btn-l:hover{background:var(--gold);border-color:var(--gold);color:var(--midnight-deep)}
+.btn-fg{background:var(--forest);border-color:var(--forest);color:var(--ivory)}
+.btn-fg:hover{background:var(--gold);border-color:var(--gold);color:var(--midnight-deep)}
+
+/* ===== FOOTER ===== */
+footer{background:var(--midnight-deep);border-top:1px solid rgba(196,154,60,.06);padding:70px 60px 36px;position:relative;z-index:2}
+.fi{max-width:1260px;margin:0 auto}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:50px;padding-bottom:50px;border-bottom:1px solid rgba(244,239,226,.04)}
+.fb-t{font-family:var(--display);font-size:32px;font-weight:700;color:var(--ivory);margin-bottom:14px}
+.fb-t em{font-style:italic;font-weight:400;color:var(--gold)}
+.fb-tl{font-family:var(--body);font-style:italic;font-size:16px;color:rgba(244,239,226,.25);max-width:320px;line-height:1.5}
+.fc h5{font-family:var(--mono);font-size:8px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:22px;opacity:.7}
+.fc ul{list-style:none}
+.fc li{margin-bottom:10px}
+.fc a{font-family:var(--body);color:rgba(244,239,226,.3);text-decoration:none;font-size:15px;transition:color .3s}
+.fc a:hover{color:var(--gold)}
+.fbot{display:flex;justify-content:space-between;align-items:center;padding-top:26px;font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,239,226,.15)}
+.fbot-c{color:var(--gold);opacity:.4;font-size:10px}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .s{padding:100px 24px}
+  .br-split{grid-template-columns:1fr;gap:50px}
+  .ld-row{grid-template-columns:1fr;gap:30px}
+  .ni-lay{grid-template-columns:1fr;gap:40px}
+  .pr-g{grid-template-columns:1fr}
+  .pl-g{grid-template-columns:1fr}
+  .ft{grid-template-columns:1fr;gap:36px}
+  .gc{width:300px;height:400px}.gc.w{width:440px}
+  nav{padding:14px 20px}.nl{display:none}
+  .dots{display:none}
+  .cur,.cur-t{display:none}body{cursor:auto}
+  .pl-pr{flex-direction:column;align-items:flex-start;gap:8px}.pl-ar{transform:rotate(90deg)}
+  .fbot{flex-direction:column;gap:14px;text-align:center}
+  .cta-s{padding:100px 24px}
+}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-t" id="curt"></div>
+<div class="spb" id="spb"></div>
+<div class="grain"></div>
+
+<!-- LOADER -->
+<div class="ld" id="ld">
+  <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+    <!-- Faithful Namilyango Crest Recreation -->
+    <defs>
+      <clipPath id="shield"><path d="M10 8 L60 2 L110 8 L110 90 Q60 130 10 90 Z"/></clipPath>
+    </defs>
+    <!-- Shield outline -->
+    <path d="M10 8 L60 2 L110 8 L110 90 Q60 130 10 90 Z" fill="none" stroke="#C49A3C" stroke-width=".8" opacity=".5"/>
+    <!-- Shield interior -->
+    <g clip-path="url(#shield)">
+      <!-- Top: Blue with dove -->
+      <rect x="10" y="2" width="100" height="50" fill="#1C3556" opacity=".6"/>
+      <!-- Dove silhouette -->
+      <path d="M52 24 Q48 18 40 20 Q36 22 38 26 Q35 25 33 28 Q36 30 40 28 L50 32 Q55 34 62 30 Q68 26 72 22 Q66 24 60 22 Q56 20 52 24Z" fill="rgba(244,239,226,.5)"/>
+      <!-- Bottom left: Red -->
+      <rect x="10" y="52" width="50" height="78" fill="#8B4332" opacity=".5"/>
+      <!-- Anchor symbol -->
+      <line x1="35" y1="62" x2="35" y2="90" stroke="rgba(244,239,226,.4)" stroke-width="1.5"/>
+      <circle cx="35" cy="60" r="4" fill="none" stroke="rgba(244,239,226,.4)" stroke-width="1"/>
+      <path d="M25 86 Q35 94 45 86" fill="none" stroke="rgba(244,239,226,.4)" stroke-width="1.5"/>
+      <line x1="28" y1="76" x2="42" y2="76" stroke="rgba(244,239,226,.4)" stroke-width="1.5"/>
+      <!-- Bottom right: Gold -->
+      <rect x="60" y="52" width="50" height="78" fill="#C49A3C" opacity=".35"/>
+      <!-- Chi-Rho symbol -->
+      <line x1="82" y1="60" x2="82" y2="96" stroke="rgba(244,239,226,.4)" stroke-width="1.5"/>
+      <path d="M74 70 Q82 60 90 70" fill="none" stroke="rgba(244,239,226,.4)" stroke-width="1.5"/>
+      <line x1="74" y1="78" x2="90" y2="78" stroke="rgba(244,239,226,.4)" stroke-width="1"/>
+    </g>
+    <!-- Green border -->
+    <path d="M10 8 L60 2 L110 8 L110 90 Q60 130 10 90 Z" fill="none" stroke="#2A5A42" stroke-width="2.5" opacity=".6"/>
+    <text x="60" y="138" font-family="JetBrains Mono" font-size="5" letter-spacing="3.5" fill="#C49A3C" text-anchor="middle" opacity=".4">NGOBUS · MCMXC</text>
+  </svg>
+  <div class="ld-t">Entering the Archive</div>
+  <div class="ld-b"></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nb">NGOBUS <em>'90</em></div>
+  <ul class="nl">
+    <li><a href="#brotherhood">Brotherhood</a></li>
+    <li><a href="#gallery">Memories</a></li>
+    <li><a href="#nice">N.I.C.E.</a></li>
+    <li><a href="#memorial">In Memoriam</a></li>
+    <li><a href="#plans">The Plans</a></li>
+  </ul>
+</nav>
+
+<!-- DOTS -->
+<div class="dots" id="dots">
+  <div class="dot a" data-s="hero"></div>
+  <div class="dot" data-s="brotherhood"></div>
+  <div class="dot" data-s="leadership"></div>
+  <div class="dot" data-s="gallery"></div>
+  <div class="dot" data-s="nice"></div>
+  <div class="dot" data-s="memorial"></div>
+  <div class="dot" data-s="profiles"></div>
+  <div class="dot" data-s="plans"></div>
+</div>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="hero">
+  <canvas class="hero-canvas" id="hc"></canvas>
+  <div class="hero-vig"></div>
+  <div class="hero-c">
+    <!-- Inline Crest -->
+    <svg class="hero-crest" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+      <defs><clipPath id="hs"><path d="M10 8 L60 2 L110 8 L110 90 Q60 130 10 90 Z"/></clipPath></defs>
+      <g clip-path="url(#hs)">
+        <rect x="10" y="2" width="100" height="50" fill="#1C3556" opacity=".7"/>
+        <path d="M52 24 Q48 18 40 20 Q36 22 38 26 Q35 25 33 28 Q36 30 40 28 L50 32 Q55 34 62 30 Q68 26 72 22 Q66 24 60 22 Q56 20 52 24Z" fill="rgba(244,239,226,.6)"/>
+        <rect x="10" y="52" width="50" height="78" fill="#8B4332" opacity=".55"/>
+        <line x1="35" y1="62" x2="35" y2="90" stroke="rgba(244,239,226,.45)" stroke-width="1.5"/>
+        <circle cx="35" cy="60" r="4" fill="none" stroke="rgba(244,239,226,.45)" stroke-width="1"/>
+        <path d="M25 86 Q35 94 45 86" fill="none" stroke="rgba(244,239,226,.45)" stroke-width="1.5"/>
+        <line x1="28" y1="76" x2="42" y2="76" stroke="rgba(244,239,226,.45)" stroke-width="1.5"/>
+        <rect x="60" y="52" width="50" height="78" fill="#C49A3C" opacity=".4"/>
+        <line x1="82" y1="60" x2="82" y2="96" stroke="rgba(244,239,226,.45)" stroke-width="1.5"/>
+        <path d="M74 70 Q82 60 90 70" fill="none" stroke="rgba(244,239,226,.45)" stroke-width="1.5"/>
+        <line x1="74" y1="78" x2="90" y2="78" stroke="rgba(244,239,226,.45)" stroke-width="1"/>
+      </g>
+      <path d="M10 8 L60 2 L110 8 L110 90 Q60 130 10 90 Z" fill="none" stroke="#2A5A42" stroke-width="2.5" opacity=".7"/>
+    </svg>
+    <div class="hero-ey">Namilyango College · Est. MCMXC</div>
+    <h1 class="hero-t" id="ht">
+      <span class="tm">NGOBUS</span>
+      <em><span class="ts">— the brotherhood —</span></em>
+    </h1>
+    <div class="hero-yr">1990 &ensp;·&ensp; 1996</div>
+    <p class="hero-tl">A one-stop place where a brother can feed his emotions and nostalgia, remember, and re-connect.</p>
+  </div>
+  <div class="hero-sc"><span>Scroll</span><div class="sln"></div></div>
+</section>
+
+<!-- TRANSITION -->
+<div class="grad-to-ivory"></div>
+
+<!-- ========== BROTHERHOOD ========== -->
+<section class="s lt-s" id="brotherhood">
+  <div class="sc">
+    <div class="sh rv">
+      <div class="sn">I</div>
+      <div class="se">Chapter One</div>
+      <h2 class="st">The <em>Brotherhood</em></h2>
+    </div>
+    <div class="br-split">
+      <div class="br-text">
+        <p class="lead rv" style="transition-delay:.1s">We came to Namilyango as boys in 1990. We left as men in 1996. What was forged in those six years has outlasted decades.</p>
+        <p class="dc rv" style="transition-delay:.2s">Ngobus '90 is the collective of those who walked those halls together — through the boarding houses, the chapel mornings, the rugby pitches, the dining halls, the prefect appointments, the leavers' prom at Nabisunsa. Our teachers shaped us. Our rivals tested us. Our friendships sustained us. Thirty years on, we remain bound by something neither time nor distance has unstitched.</p>
+        <p class="rv" style="transition-delay:.3s">This is our digital home. A place to see the old pictures, honour the comrades who have gone before us, track the investment club, register for insurance plans, and keep the brotherhood's fire lit — not as nostalgia, but as a living, breathing force.</p>
+      </div>
+      <div class="br-stats rvr" style="transition-delay:.3s">
+        <div class="stb"><div class="stb-n" data-c="1990">0</div><div class="stb-l">Founded</div></div>
+        <div class="stb"><div class="stb-n" data-c="1996">0</div><div class="stb-l">Graduated</div></div>
+        <div class="stb"><div class="stb-n" data-c="30">0</div><div class="stb-l">Years Standing</div></div>
+        <div class="stb"><div class="stb-n" data-c="7">0</div><div class="stb-l">Active Pillars</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="grad-to-dark"></div>
+
+<!-- ========== LEADERSHIP ========== -->
+<section class="s dk-s" id="leadership">
+  <div class="sc">
+    <div class="sh rv">
+      <div class="sn">II</div>
+      <div class="se">Chapter Two</div>
+      <h2 class="st">The <em>Inner Council</em></h2>
+    </div>
+    <p class="rv" style="font-family:var(--body);font-size:21px;color:rgba(244,239,226,.4);font-style:italic;max-width:680px;margin-bottom:50px;line-height:1.6;transition-delay:.1s">They were never elected. They simply emerged — by trust, by service, by years of quiet labour. These are the men who hold Ngobus '90 together.</p>
+    <div class="ld-row">
+      <div class="ldr rv" style="transition-delay:.1s">
+        <div class="ldr-av"><div class="ldr-ini">JM</div></div>
+        <div class="ldr-r">De Facto Chairman</div>
+        <h3 class="ldr-nm">John Baptist Matovu</h3>
+        <p class="ldr-q">"The brotherhood is a thing we build with our hands, our hours, and our word."</p>
+      </div>
+      <div class="ldr rv" style="transition-delay:.25s">
+        <div class="ldr-av"><div class="ldr-ini">ME</div></div>
+        <div class="ldr-r">Chief Mobilizer</div>
+        <h3 class="ldr-nm">Mitch Egwang</h3>
+        <p class="ldr-q">"When one brother is missing, the table is incomplete. We call until everyone is seated."</p>
+      </div>
+      <div class="ldr rv" style="transition-delay:.4s">
+        <div class="ldr-av"><div class="ldr-ini">DT</div></div>
+        <div class="ldr-r">Treasurer — Ten Years</div>
+        <h3 class="ldr-nm">The Treasurer</h3>
+        <p class="ldr-q">"No one voted me. I just sprouted. And here I still stand."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== GALLERY ========== -->
+<section class="s gal-s dk-s" id="gallery" style="background:linear-gradient(180deg,var(--midnight),var(--forest-deep),var(--midnight))">
+  <div class="sh rv" style="padding:0 60px;max-width:1260px;margin:0 auto 70px">
+    <div class="sn">III</div>
+    <div class="se">Chapter Three</div>
+    <h2 class="st">The <em>Memory Vault</em></h2>
+  </div>
+  <div class="gtw" id="gtw">
+    <div class="gt" id="gt">
+      <div class="gc w"><div class="gc-img" style="background:linear-gradient(135deg,#2a3e55 0%,#142233 100%)"></div><div class="gc-ov"><div class="gc-m">1996 · Leavers' Prom</div><div class="gc-t">The Nabisunsa Night</div></div></div>
+      <div class="gc"><div class="gc-img" style="background:linear-gradient(135deg,#3a4a35,#1d2a1a)"></div><div class="gc-ov"><div class="gc-m">1994 · Sports Day</div><div class="gc-t">First Eleven</div></div></div>
+      <div class="gc"><div class="gc-img" style="background:linear-gradient(135deg,#4a3a2a,#2a1f15)"></div><div class="gc-ov"><div class="gc-m">1992 · The Grounds</div><div class="gc-t">Our Teachers</div></div></div>
+      <div class="gc w"><div class="gc-img" style="background:linear-gradient(135deg,#1f2e40,#0d1820)"></div><div class="gc-ov"><div class="gc-m">1995 · Chapel</div><div class="gc-t">Sunday Morning</div></div></div>
+      <div class="gc"><div class="gc-img" style="background:linear-gradient(135deg,#3d2a1e,#1f140a)"></div><div class="gc-ov"><div class="gc-m">2023 · Kampala</div><div class="gc-t">The Reunion</div></div></div>
+      <div class="gc"><div class="gc-img" style="background:linear-gradient(135deg,#2e4030,#162018)"></div><div class="gc-ov"><div class="gc-m">1996 · Final Year</div><div class="gc-t">Prefects' Bench</div></div></div>
+      <div class="gc w"><div class="gc-img" style="background:linear-gradient(135deg,#3a2e42,#1a1420)"></div><div class="gc-ov"><div class="gc-m">2024 · 30th Anniversary</div><div class="gc-t">Still Standing</div></div></div>
+    </div>
+  </div>
+  <div class="gal-hint rv" style="transition-delay:.2s"><div class="gal-hl"></div><span>Drag to explore the archive</span><div class="gal-hl"></div></div>
+</section>
+
+<div class="grad-to-ivory-from-forest" style="background:linear-gradient(180deg,var(--midnight),var(--ivory))"></div>
+
+<!-- ========== N.I.C.E. ========== -->
+<section class="s lt-s" id="nice">
+  <div class="sc">
+    <div class="sh rv">
+      <div class="sn">IV</div>
+      <div class="se">Chapter Four · Investment Club</div>
+      <h2 class="st">N.I.C.E.</h2>
+    </div>
+    <div class="ni-lay">
+      <div class="ni-brand rvl" style="transition-delay:.1s">
+        <div class="ni-gnt">NICE</div>
+        <div class="ni-sub">Ngobus Investment Club Endeavour</div>
+      </div>
+      <div>
+        <p class="ni-p rv" style="transition-delay:.15s">Not every brother is in N.I.C.E. Not every brother needs to be. But for those who choose to pool their capital, their judgment, and their patience — this is the vehicle through which Ngobus '90 builds wealth, together.</p>
+        <p class="ni-p rv" style="transition-delay:.25s">Reports are published. Projects are visible. The chairman and treasurer communicate openly. If you are not yet in N.I.C.E., this section shows you exactly what you are missing — and why you might want in.</p>
+        <div class="ni-g">
+          <div class="ni-c rv" style="transition-delay:.3s"><div class="ni-cl">Vision</div><div class="ni-ct">Compound the trust of the brotherhood into generational wealth.</div></div>
+          <div class="ni-c rv" style="transition-delay:.35s"><div class="ni-cl">Objectives</div><div class="ni-ct">Disciplined investment, transparent reporting, shared upside.</div></div>
+          <div class="ni-c rv" style="transition-delay:.4s"><div class="ni-cl">Projects</div><div class="ni-ct">Active and proposed ventures, viewable in real time by members.</div></div>
+          <div class="ni-c rv" style="transition-delay:.45s"><div class="ni-cl">Reports</div><div class="ni-ct">Quarterly PDF statements published for download by login.</div></div>
+        </div>
+        <div class="ni-ctas rv" style="transition-delay:.5s">
+          <a href="#" class="btn btn-f">View Latest Report</a>
+          <a href="#" class="btn">Word From the Chair</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="grad-to-midnight"></div>
+
+<!-- ========== MEMORIAL ========== -->
+<section class="s dk-s mem" id="memorial">
+  <div class="sc">
+    <div class="sh rv">
+      <div class="sn" style="text-align:center;width:100%">V</div>
+      <div class="mem-dv"><div class="mem-dvl"></div><div class="mem-dvs">✦</div><div class="mem-dvl"></div></div>
+      <div class="se" style="text-align:center">Chapter Five</div>
+      <h2 class="st" style="text-align:center">In <em>Memoriam</em></h2>
+    </div>
+    <p class="mem-q rv" style="transition-delay:.15s">"They were not just classmates. They carried nicknames we gave them, songs we still hum, jokes only we understand. To remember them by name is to keep the brotherhood whole."</p>
+    <div class="mem-row">
+      <div class="mem-s rv" style="transition-delay:.2s"><div class="mem-sc"></div><div class="mem-sn">[ Comrade ]</div><div class="mem-sy">Rest In Peace</div></div>
+      <div class="mem-s rv" style="transition-delay:.3s"><div class="mem-sc"></div><div class="mem-sn">[ Comrade ]</div><div class="mem-sy">Rest In Peace</div></div>
+      <div class="mem-s rv" style="transition-delay:.4s"><div class="mem-sc"></div><div class="mem-sn">[ Comrade ]</div><div class="mem-sy">Rest In Peace</div></div>
+      <div class="mem-s rv" style="transition-delay:.5s"><div class="mem-sc"></div><div class="mem-sn">[ Comrade ]</div><div class="mem-sy">Rest In Peace</div></div>
+    </div>
+    <div class="mem-candle rv" style="transition-delay:.6s"></div>
+  </div>
+</section>
+
+<div class="grad-to-ivory-from-midnight"></div>
+
+<!-- ========== PROFILES ========== -->
+<section class="s lt-s" id="profiles">
+  <div class="sc">
+    <div class="sh rv">
+      <div class="sn">VI</div>
+      <div class="se">Chapter Six</div>
+      <h2 class="st">The <em>Roll Call</em></h2>
+    </div>
+    <p class="pr-intro rv" style="transition-delay:.1s">Three decades on, the boys of Ngobus have become physicians, advocates, engineers, founders, ministers, fathers. Below, selected brothers tell us where the road has taken them.</p>
+    <div class="pr-g">
+      <div class="pr rv" style="transition-delay:.15s">
+        <div class="pr-tg">Advocate · Senior Counsel</div>
+        <h3 class="pr-nm">[ Member Name ]</h3>
+        <p class="pr-bio">Three decades at the bar. Constitutional law, commercial disputes, and the quiet pro-bono cases no one hears about. A brother first, always.</p>
+        <a href="#" class="pr-lnk">Read His Story →</a>
+      </div>
+      <div class="pr rv" style="transition-delay:.25s">
+        <div class="pr-tg">Consultant Physician</div>
+        <h3 class="pr-nm">[ Member Name ]</h3>
+        <p class="pr-bio">From Mulago to Mbarara. A lifetime in medicine. The first call when any brother needs counsel on a diagnosis or a referral.</p>
+        <a href="#" class="pr-lnk">Read His Story →</a>
+      </div>
+      <div class="pr rv" style="transition-delay:.35s">
+        <div class="pr-tg">Civil Engineer · Founder</div>
+        <h3 class="pr-nm">[ Member Name ]</h3>
+        <p class="pr-bio">Roads, bridges, water systems. Built across East Africa. Mentors his classmates' sons in the trade. Speaks little. Builds much.</p>
+        <a href="#" class="pr-lnk">Read His Story →</a>
+      </div>
+    </div>
+    <div class="rv" style="text-align:center;margin-top:50px;transition-delay:.45s">
+      <a href="#" class="btn">View Full Directory</a>
+    </div>
+  </div>
+</section>
+
+<div class="grad-to-dark"></div>
+
+<!-- ========== PLANS ========== -->
+<section class="s dk-s" id="plans">
+  <div class="sc">
+    <div class="sh rv">
+      <div class="sn">VII</div>
+      <div class="se">Chapter Seven · The Mutual Plans</div>
+      <h2 class="st">When one falls,<br><em>we stand together.</em></h2>
+    </div>
+    <div class="pl-g">
+      <div class="pl rv" style="transition-delay:.1s">
+        <div class="pl-bd">Active</div>
+        <div class="pl-ty">Mutual Plan No. I</div>
+        <h3 class="pl-nm">The <em>Funeral</em> Plan</h3>
+        <div class="pl-pr">
+          <div><div class="pl-am" data-c="130000">0</div><div class="pl-an">UGX contribution</div></div>
+          <div class="pl-ar">→</div>
+          <div><div class="pl-am" data-c="5000000">0</div><div class="pl-an">UGX family support</div></div>
+        </div>
+        <ul class="pl-ft">
+          <li>Activated when bereavement strikes a member's household</li>
+          <li>Payout to the member's family, no questions asked</li>
+          <li>Enrollment open year-round through this site</li>
+          <li>Transparent ledger of contributors and payouts</li>
+        </ul>
+        <div class="pl-ct"><a href="#" class="btn btn-g">Enroll Now</a></div>
+      </div>
+      <div class="pl rv" style="transition-delay:.25s">
+        <div class="pl-bd">In Development</div>
+        <div class="pl-ty">Mutual Plan No. II</div>
+        <h3 class="pl-nm">The <em>Medical</em> Plan</h3>
+        <p class="pl-dt">A shared health cover for the brotherhood — to ensure no member faces a medical crisis alone, and no brother is denied care for want of means.</p>
+        <ul class="pl-ft">
+          <li>Currently under negotiation with insurance partners</li>
+          <li>Designed around member contributions and shared risk</li>
+          <li>Will launch via this portal once finalised</li>
+          <li>Register your interest now to shape the plan</li>
+        </ul>
+        <div class="pl-ct"><a href="#" class="btn btn-g">Register Interest</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA ========== -->
+<section class="cta-s" id="cta">
+  <div class="rv">
+    <h2 class="st">The archive is open.<br><em>Your brotherhood awaits.</em></h2>
+    <p class="cta-sub">Whether you want to submit a memory, honour a comrade, join a plan, or simply reconnect — the door is open to every Ngobu.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn btn-fg">Member Login</a>
+      <a href="#" class="btn btn-l">Submit a Memory</a>
+      <a href="#" class="btn btn-l">Contact the Council</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="fi">
+    <div class="ft">
+      <div>
+        <div class="fb-t">NGOBUS <em>'90</em></div>
+        <p class="fb-tl">The brotherhood of Namilyango College, class of 1990 to 1996. Bound in memory. Bound in service. Bound for life.</p>
+      </div>
+      <div class="fc"><h5>Chapters</h5><ul><li><a href="#brotherhood">The Brotherhood</a></li><li><a href="#leadership">Inner Council</a></li><li><a href="#gallery">Memory Vault</a></li><li><a href="#nice">N.I.C.E.</a></li></ul></div>
+      <div class="fc"><h5>Membership</h5><ul><li><a href="#profiles">Roll Call</a></li><li><a href="#memorial">In Memoriam</a></li><li><a href="#plans">Mutual Plans</a></li><li><a href="#">Member Login</a></li></ul></div>
+      <div class="fc"><h5>Liaison</h5><ul><li><a href="#">Contact the Council</a></li><li><a href="#">Submit a Memory</a></li><li><a href="#">Honour a Comrade</a></li><li><a href="#">SMS Alerts</a></li></ul></div>
+    </div>
+    <div class="fbot">
+      <div>© Ngobus '90 · Namilyango College</div>
+      <div class="fbot-c">✦ Fraternitas Aeterna ✦</div>
+      <div>Designed by NS Creative</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// LOADER
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('ld').classList.add('done'),3000)});
+
+// CURSOR
+const cur=document.getElementById('cur'),curt=document.getElementById('curt');
+let mx=0,my=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.transform=`translate(${mx-5}px,${my-5}px)`});
+(function tl(){tx+=(mx-tx)*.1;ty+=(my-ty)*.1;curt.style.transform=`translate(${tx-2}px,${ty-2}px)`;requestAnimationFrame(tl)})();
+document.querySelectorAll('a,button,.gc,.pr,.pl,.ldr,.btn,.dot').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('h'));el.addEventListener('mouseleave',()=>cur.classList.remove('h'))});
+
+// SCROLL PROGRESS
+const spb=document.getElementById('spb');
+window.addEventListener('scroll',()=>{spb.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%'},{passive:true});
+
+// NAV
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('sc',window.scrollY>80)},{passive:true});
+
+// HERO LETTERS
+function anim(){
+  const m=document.querySelector('.tm'),s=document.querySelector('.ts');
+  [m,s].forEach((el,gi)=>{const t=el.textContent;el.innerHTML='';[...t].forEach((c,i)=>{const sp=document.createElement('span');sp.className='lt';sp.textContent=c===' '?'\u00A0':c;sp.style.animationDelay=`${3.2+(gi*.5)+(i*.07)}s`;el.appendChild(sp)})})}
+anim();
+
+// REVEALS
+const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');ro.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>ro.observe(el));
+
+// DOTS
+const dots=document.querySelectorAll('.dot');
+const secs=['hero','brotherhood','leadership','gallery','nice','memorial','profiles','plans'];
+const dro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){dots.forEach(d=>d.classList.remove('a'));const i=secs.indexOf(e.target.id);if(i>=0)dots[i].classList.add('a')}})},{threshold:.25});
+secs.forEach(id=>{const el=document.getElementById(id);if(el)dro.observe(el)});
+dots.forEach(d=>d.addEventListener('click',()=>{const el=document.getElementById(d.dataset.s);if(el)el.scrollIntoView({behavior:'smooth'})}));
+
+// COUNTERS
+function cu(el){const t=parseInt(el.dataset.c);const big=t>10000;const dur=big?2200:1400;const st=performance.now();
+function tk(n){const p=Math.min((n-st)/dur,1);const e=1-Math.pow(1-p,4);el.textContent=big?Math.floor(e*t).toLocaleString():Math.floor(e*t);if(p<1)requestAnimationFrame(tk)}requestAnimationFrame(tk)}
+const co=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){cu(e.target);co.unobserve(e.target)}})},{threshold:.4});
+document.querySelectorAll('[data-c]').forEach(el=>co.observe(el));
+
+// GALLERY DRAG
+const gw=document.getElementById('gtw'),gt=document.getElementById('gt');
+let dr=false,sx=0,sl=0,cx=0;
+gw.addEventListener('mousedown',e=>{dr=true;sx=e.pageX;sl=cx;gw.style.cursor='grabbing'});
+window.addEventListener('mousemove',e=>{if(!dr)return;const d=e.pageX-sx;cx=sl+d;const mx=-(gt.scrollWidth-gw.clientWidth+120);cx=Math.max(mx,Math.min(0,cx));gt.style.transform=`translateX(${cx}px)`});
+window.addEventListener('mouseup',()=>{dr=false;gw.style.cursor='grab'});
+gw.addEventListener('touchstart',e=>{dr=true;sx=e.touches[0].pageX;sl=cx},{passive:true});
+gw.addEventListener('touchmove',e=>{if(!dr)return;const d=e.touches[0].pageX-sx;cx=sl+d;const mx=-(gt.scrollWidth-gw.clientWidth+120);cx=Math.max(mx,Math.min(0,cx));gt.style.transform=`translateX(${cx}px)`},{passive:true});
+gw.addEventListener('touchend',()=>{dr=false});
+
+// PARTICLES
+const cv=document.getElementById('hc'),ctx=cv.getContext('2d');let pts=[];
+function rc(){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight}
+rc();window.addEventListener('resize',rc);
+class P{constructor(){this.r()}
+r(){this.x=Math.random()*cv.width;this.y=Math.random()*cv.height;this.sz=Math.random()*1.8+.4;this.sx=(Math.random()-.5)*.12;this.sy=(Math.random()-.5)-.08;this.o=Math.random()*.3+.08;this.l=Math.random()*500+200;this.a=0}
+u(){this.x+=this.sx;this.y+=this.sy;this.a++;if(this.a>this.l||this.y<-10||this.x<-10||this.x>cv.width+10)this.r()}
+d(){const f=1-this.a/this.l;ctx.beginPath();ctx.arc(this.x,this.y,this.sz,0,Math.PI*2);ctx.fillStyle=`rgba(196,154,60,${this.o*f})`;ctx.fill()}}
+for(let i=0;i<50;i++)pts.push(new P());
+function ap(){ctx.clearRect(0,0,cv.width,cv.height);pts.forEach(p=>{p.u();p.d()});requestAnimationFrame(ap)}ap();
+</script>
+</body>
+</html>
