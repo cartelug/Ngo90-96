@@ -274,21 +274,269 @@ footer{background:var(--midnight-deep);border-top:1px solid rgba(196,154,60,.06)
 .fbot-c{color:var(--gold);opacity:.4;font-size:10px}
 
 /* ===== RESPONSIVE ===== */
+/* ===== HAMBURGER & MOBILE MENU ===== */
+.ham{display:none;background:none;border:none;cursor:pointer;width:32px;height:20px;position:relative;z-index:100001;padding:0}
+.ham span{display:block;width:100%;height:1.5px;background:var(--gold);position:absolute;left:0;transition:all .35s cubic-bezier(.16,1,.3,1)}
+.ham span:nth-child(1){top:0}
+.ham span:nth-child(2){top:50%;transform:translateY(-50%)}
+.ham span:nth-child(3){bottom:0}
+.ham.open span:nth-child(1){top:50%;transform:translateY(-50%) rotate(45deg)}
+.ham.open span:nth-child(2){opacity:0;transform:translateX(10px)}
+.ham.open span:nth-child(3){bottom:auto;top:50%;transform:translateY(-50%) rotate(-45deg)}
+
+@media(max-width:768px){
+  .ham{display:block}
+  .nl{position:fixed;inset:0;background:rgba(6,15,26,.97);backdrop-filter:blur(30px);flex-direction:column;align-items:center;justify-content:center;gap:0;
+    opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s,visibility .4s;z-index:100000;display:flex!important}
+  .nl.open{opacity:1;visibility:visible;pointer-events:auto}
+  .nl li{opacity:0;transform:translateY(20px);transition:opacity .4s,transform .4s}
+  .nl.open li{opacity:1;transform:translateY(0)}
+  .nl.open li:nth-child(1){transition-delay:.1s}
+  .nl.open li:nth-child(2){transition-delay:.15s}
+  .nl.open li:nth-child(3){transition-delay:.2s}
+  .nl.open li:nth-child(4){transition-delay:.25s}
+  .nl.open li:nth-child(5){transition-delay:.3s}
+  .nl a{font-size:14px!important;letter-spacing:.25em!important;color:var(--ivory)!important;padding:18px 0;display:block}
+  .nl a::after{display:none}
+}
+
+/* ===== TABLET: 768px – 1024px ===== */
 @media(max-width:1024px){
-  .s{padding:100px 24px}
+  .s{padding:110px 36px}
   .br-split{grid-template-columns:1fr;gap:50px}
-  .ld-row{grid-template-columns:1fr;gap:30px}
-  .ni-lay{grid-template-columns:1fr;gap:40px}
-  .pr-g{grid-template-columns:1fr}
-  .pl-g{grid-template-columns:1fr}
-  .ft{grid-template-columns:1fr;gap:36px}
-  .gc{width:300px;height:400px}.gc.w{width:440px}
-  nav{padding:14px 20px}.nl{display:none}
+  .ld-row{grid-template-columns:1fr 1fr;gap:30px}
+  .ni-lay{grid-template-columns:1fr;gap:50px}
+  .pr-g{grid-template-columns:1fr 1fr;gap:22px}
+  .pl-g{grid-template-columns:1fr 1fr;gap:22px}
+  .ft{grid-template-columns:1fr 1fr;gap:40px}
+  .gc{width:320px;height:420px}.gc.w{width:480px}
+  nav{padding:16px 28px}.nl{gap:24px}
+  .nl a{font-size:9px;letter-spacing:.18em}
   .dots{display:none}
   .cur,.cur-t{display:none}body{cursor:auto}
-  .pl-pr{flex-direction:column;align-items:flex-start;gap:8px}.pl-ar{transform:rotate(90deg)}
-  .fbot{flex-direction:column;gap:14px;text-align:center}
-  .cta-s{padding:100px 24px}
+  .hero-t{font-size:clamp(64px,12vw,140px)}
+  .sn{font-size:70px}
+  .st{font-size:clamp(38px,5.5vw,72px)}
+  .ni-gnt{font-size:clamp(100px,14vw,200px)}
+  .cta-s{padding:110px 36px}
+  .gal-s .sh{padding:0 36px}
+  .gal-hint{padding:30px 36px 0}
+}
+
+/* ===== LARGE PHONE / SMALL TABLET: 480px – 768px ===== */
+@media(max-width:768px){
+  .s{padding:80px 20px}
+  .sh{margin-bottom:60px}
+  .sn{font-size:56px}
+  .se{font-size:8px;letter-spacing:.35em;margin-bottom:10px}
+  .st{font-size:clamp(32px,8vw,52px)}
+  nav{padding:14px 18px}
+  .nl{display:none}
+  .nb{font-size:17px}
+  /* Hero */
+  .hero{min-height:100svh}
+  .hero-c{padding:0 16px}
+  .hero-crest{width:90px;margin-bottom:28px}
+  .hero-ey{font-size:8px;letter-spacing:.4em;margin-bottom:28px}
+  .hero-t{font-size:clamp(56px,16vw,100px)}
+  .hero-t em{font-size:.35em;margin-top:10px}
+  .hero-yr{font-size:18px;letter-spacing:.35em;margin-top:36px}
+  .hero-yr::before,.hero-yr::after{width:30px}
+  .hero-yr::before{right:calc(100% + 14px)}
+  .hero-yr::after{left:calc(100% + 14px)}
+  .hero-tl{font-size:17px;margin-top:26px}
+  .hero-sc{bottom:24px}
+  /* Brotherhood */
+  .br-split{grid-template-columns:1fr;gap:40px}
+  .br-text .lead{font-size:24px}
+  .br-text p{font-size:17px}
+  .br-text .dc::first-letter{font-size:60px;margin:8px 10px 0 0}
+  .br-stats{gap:2px}
+  .stb{padding:36px 24px}
+  .stb-n{font-size:44px}
+  .stb-l{font-size:7px}
+  /* Leadership */
+  .ld-row{grid-template-columns:1fr;gap:36px}
+  .ldr{padding:36px 20px 30px}
+  .ldr::before{height:36px}
+  .ldr-av{width:140px;height:140px;margin-bottom:24px}
+  .ldr-ini{font-size:42px}
+  .ldr-nm{font-size:22px}
+  .ldr-q{font-size:15px}
+  /* Gallery */
+  .gal-s{padding:80px 0}
+  .gal-s .sh{padding:0 20px;margin-bottom:50px}
+  .gc{width:280px;height:380px}.gc.w{width:400px}
+  .gt{gap:14px;padding:0 20px}
+  .gc-ov{padding:26px}
+  .gc-t{font-size:20px}
+  .gal-hint{padding:24px 20px 0}
+  /* NICE */
+  .ni-lay{grid-template-columns:1fr;gap:36px}
+  .ni-gnt{font-size:clamp(80px,22vw,160px);text-align:center}
+  .ni-sub{text-align:center}
+  .ni-p{font-size:18px}
+  .ni-g{grid-template-columns:1fr;gap:12px}
+  .ni-c{padding:22px}
+  .ni-ctas{flex-direction:column;gap:10px}
+  .ni-ctas .btn{text-align:center;width:100%}
+  /* Memorial */
+  .mem-q{font-size:clamp(19px,4vw,28px);margin:36px auto 50px}
+  .mem-row{gap:36px}
+  .mem-sc{width:90px;height:90px}
+  .mem-sn{font-size:15px}
+  /* Profiles */
+  .pr-intro{font-size:18px;margin-bottom:40px}
+  .pr-g{grid-template-columns:1fr;gap:16px}
+  .pr{padding:32px 24px}
+  .pr-nm{font-size:21px}
+  .pr-bio{font-size:14px}
+  /* Plans */
+  .pl-g{grid-template-columns:1fr;gap:20px}
+  .pl{padding:40px 28px}
+  .pl-nm{font-size:30px}
+  .pl-pr{flex-direction:column;align-items:flex-start;gap:12px}
+  .pl-am{font-size:36px}
+  .pl-ar{transform:rotate(90deg);margin:4px 0}
+  .pl-ft li{font-size:15px;padding-left:22px}
+  /* CTA */
+  .cta-s{padding:80px 20px}
+  .cta-sub{font-size:18px;margin:22px auto 36px}
+  .cta-btns{flex-direction:column;gap:10px;align-items:center}
+  .cta-btns .btn{width:100%;max-width:300px;text-align:center}
+  /* Footer */
+  .ft{grid-template-columns:1fr;gap:32px}
+  .fb-t{font-size:26px}
+  .fb-tl{font-size:15px}
+  .fbot{flex-direction:column;gap:12px;text-align:center}
+  /* Transitions */
+  .grad-to-ivory,.grad-to-dark,.grad-to-forest,.grad-to-ivory-from-forest,.grad-to-midnight,.grad-to-ivory-from-midnight{height:80px}
+}
+
+/* ===== SMALL PHONE: below 480px ===== */
+@media(max-width:480px){
+  .s{padding:64px 16px}
+  .sh{margin-bottom:44px}
+  .sn{font-size:44px;margin-bottom:-10px}
+  .se{font-size:7px;letter-spacing:.3em}
+  .st{font-size:clamp(28px,9vw,44px)}
+  /* Hero */
+  .hero-crest{width:72px;margin-bottom:22px}
+  .hero-ey{font-size:7px;letter-spacing:.3em;margin-bottom:22px}
+  .hero-t{font-size:clamp(48px,18vw,80px);line-height:.85}
+  .hero-t em{font-size:.32em;margin-top:8px}
+  .hero-yr{font-size:15px;letter-spacing:.3em;margin-top:28px}
+  .hero-yr::before,.hero-yr::after{width:20px}
+  .hero-yr::before{right:calc(100% + 10px)}
+  .hero-yr::after{left:calc(100% + 10px)}
+  .hero-tl{font-size:15px;margin-top:20px;line-height:1.5}
+  /* Brotherhood */
+  .br-text .lead{font-size:21px;line-height:1.4}
+  .br-text p{font-size:16px;line-height:1.75}
+  .br-text .dc::first-letter{font-size:50px}
+  .stb{padding:28px 18px}
+  .stb-n{font-size:36px}
+  /* Leadership */
+  .ldr-av{width:120px;height:120px}
+  .ldr-ini{font-size:36px}
+  .ldr-nm{font-size:20px}
+  .ldr-r{font-size:8px}
+  .ldr-q{font-size:14px}
+  /* Gallery */
+  .gc{width:240px;height:320px}.gc.w{width:320px}
+  .gt{gap:10px;padding:0 16px}
+  .gc-ov{padding:20px}
+  .gc-m{font-size:8px}
+  .gc-t{font-size:18px}
+  /* NICE */
+  .ni-gnt{font-size:clamp(60px,26vw,120px)}
+  .ni-p{font-size:16px}
+  .ni-cl{font-size:7px}
+  .ni-ct{font-size:14px}
+  /* Memorial */
+  .mem-q{font-size:18px;margin:28px auto 40px}
+  .mem-row{gap:28px}
+  .mem-sc{width:76px;height:76px}
+  .mem-sc::after{font-size:14px}
+  .mem-sn{font-size:14px}
+  .mem-sy{font-size:8px}
+  /* Profiles */
+  .pr-intro{font-size:16px}
+  .pr{padding:28px 20px}
+  .pr-tg{font-size:7px}
+  .pr-nm{font-size:19px}
+  .pr-bio{font-size:14px;line-height:1.55}
+  /* Plans */
+  .pl{padding:32px 22px}
+  .pl-bd{font-size:7px;padding:3px 10px}
+  .pl-nm{font-size:26px}
+  .pl-am{font-size:30px}
+  .pl-ft li{font-size:14px;padding:9px 0 9px 20px}
+  .pl-dt{font-size:16px}
+  /* CTA */
+  .cta-s{padding:64px 16px}
+  .cta-s .st{font-size:clamp(26px,7vw,40px)}
+  .cta-sub{font-size:16px}
+  /* Footer */
+  .fb-t{font-size:22px}
+  .fc h5{font-size:7px;margin-bottom:16px}
+  .fc a{font-size:14px}
+  .fbot{font-size:7px}
+  /* Transitions */
+  .grad-to-ivory,.grad-to-dark,.grad-to-forest,.grad-to-ivory-from-forest,.grad-to-midnight,.grad-to-ivory-from-midnight{height:50px}
+  /* Buttons */
+  .btn{padding:14px 28px;font-size:8px}
+}
+
+/* ===== ULTRA-SMALL: below 360px (SE, mini phones) ===== */
+@media(max-width:360px){
+  .s{padding:50px 14px}
+  .hero-t{font-size:clamp(40px,20vw,64px)}
+  .hero-yr{font-size:13px;letter-spacing:.25em}
+  .hero-tl{font-size:14px}
+  .sn{font-size:36px}
+  .st{font-size:clamp(24px,8vw,36px)}
+  .br-text .lead{font-size:18px}
+  .stb-n{font-size:30px}
+  .ni-gnt{font-size:50px}
+  .pl-am{font-size:24px}
+  .gc{width:200px;height:280px}.gc.w{width:270px}
+}
+
+/* ===== SAFE AREA (notched phones) ===== */
+@supports(padding:env(safe-area-inset-bottom)){
+  footer{padding-bottom:calc(36px + env(safe-area-inset-bottom))}
+  nav{padding-left:calc(18px + env(safe-area-inset-left));padding-right:calc(18px + env(safe-area-inset-right))}
+}
+
+/* ===== TOUCH DEVICES ===== */
+@media(hover:none){
+  .cur,.cur-t{display:none!important}
+  body{cursor:auto!important}
+  .gc-ov{opacity:1;background:linear-gradient(180deg,transparent 55%,rgba(6,15,26,.85))}
+  .pr::before{transform:scaleX(1)}
+  .ldr:hover{transform:none}
+  .pr:hover{transform:none;box-shadow:none}
+}
+
+/* ===== LANDSCAPE PHONE ===== */
+@media(max-height:500px) and (orientation:landscape){
+  .hero{min-height:auto;padding:80px 40px}
+  .hero-crest{width:50px;margin-bottom:16px}
+  .hero-t{font-size:48px}
+  .hero-yr{margin-top:16px}
+  .hero-tl{display:none}
+  .hero-sc{display:none}
+}
+
+/* ===== PREFERS REDUCED MOTION ===== */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}
+  .grain::after{animation:none}
+  .mem-candle::before{animation:none}
+  .sln{animation:none}
+  .rv,.rvl,.rvr{opacity:1;transform:none}
+  .hero-t .lt{opacity:1;transform:none}
 }
 </style>
 </head>
@@ -339,13 +587,16 @@ footer{background:var(--midnight-deep);border-top:1px solid rgba(196,154,60,.06)
 <!-- NAV -->
 <nav id="nav">
   <div class="nb">NGOBUS <em>'90</em></div>
-  <ul class="nl">
-    <li><a href="#brotherhood">Brotherhood</a></li>
-    <li><a href="#gallery">Memories</a></li>
-    <li><a href="#nice">N.I.C.E.</a></li>
-    <li><a href="#memorial">In Memoriam</a></li>
-    <li><a href="#plans">The Plans</a></li>
+  <ul class="nl" id="navLinks">
+    <li><a href="#brotherhood" onclick="closeMenu()">Brotherhood</a></li>
+    <li><a href="#gallery" onclick="closeMenu()">Memories</a></li>
+    <li><a href="#nice" onclick="closeMenu()">N.I.C.E.</a></li>
+    <li><a href="#memorial" onclick="closeMenu()">In Memoriam</a></li>
+    <li><a href="#plans" onclick="closeMenu()">The Plans</a></li>
   </ul>
+  <button class="ham" id="ham" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- DOTS -->
@@ -708,6 +959,18 @@ u(){this.x+=this.sx;this.y+=this.sy;this.a++;if(this.a>this.l||this.y<-10||this.
 d(){const f=1-this.a/this.l;ctx.beginPath();ctx.arc(this.x,this.y,this.sz,0,Math.PI*2);ctx.fillStyle=`rgba(196,154,60,${this.o*f})`;ctx.fill()}}
 for(let i=0;i<50;i++)pts.push(new P());
 function ap(){ctx.clearRect(0,0,cv.width,cv.height);pts.forEach(p=>{p.u();p.d()});requestAnimationFrame(ap)}ap();
+
+// MOBILE MENU
+function toggleMenu(){
+  const ham=document.getElementById('ham'),nl=document.getElementById('navLinks');
+  ham.classList.toggle('open');nl.classList.toggle('open');
+  document.body.style.overflow=nl.classList.contains('open')?'hidden':'';
+}
+function closeMenu(){
+  const ham=document.getElementById('ham'),nl=document.getElementById('navLinks');
+  ham.classList.remove('open');nl.classList.remove('open');
+  document.body.style.overflow='';
+}
 </script>
 </body>
 </html>
